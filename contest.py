@@ -6,7 +6,7 @@ from dataset import Dataset
 parser = argparse.ArgumentParser()
 parser.add_argument(
     'dataset',
-    help='directory with the training dataset',
+    help='directory with the testing dataset',
     type=str,
 )
 args = parser.parse_args()
