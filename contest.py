@@ -1,6 +1,7 @@
 import argparse
 from testing import Testing
 import example.contest_interface
+import bigram.contest_interface
 from dataset import Dataset
 
 parser = argparse.ArgumentParser()
@@ -15,6 +16,10 @@ models = [
     (
         'example',
         example.contest_interface
+    ),
+    (
+        'bigram',
+        bigram.contest_interface
     ),
 ]
 
