@@ -1,6 +1,7 @@
 from collections import Counter
 import json
 import os
+from random import randint
 
 class LanguageModel:
     def __init__(self):
@@ -23,8 +24,13 @@ class LanguageModel:
                 most_likely = character
         return most_likely
 
+    def random(self):
+        character_nr = len(self.character_counts)
+        randomize = randint(0, character_nr)
+        return self.character_counts[randomize]
+
     def predict(self, prefix):
-        return self.get_most_frequent_character()
+        return self.random()
 
     def load(self, directory):
         model_json = json.load(open(os.path.join(directory, 'model.json'), 'r'))
