@@ -27,7 +27,7 @@ class LanguageModel:
         return self.get_most_frequent_character()
 
     def load(self, directory):
-        model_json = json.load(open(os.path.join(directory, 'model.json'), 'r'))
+        model_json = json.load(open(os.path.join(directory, 'model.json'), 'r', encoding="utf8"))
         self.total_characters = model_json['total_characters']
         for character in model_json['character_counts']:
             self.character_counts[character] += model_json['character_counts'][character]
