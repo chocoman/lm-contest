@@ -5,8 +5,8 @@ from os.path import join
 from datetime import datetime
 from language_model import LanguageModel
 
-VERSION = '0.1'
-NAME = 'Example'
+VERSION = '0.2'
+NAME = 'Tomas'
 
 class Training:
     def __init__(self):
@@ -25,7 +25,7 @@ class Training:
             open(join(directory, 'model.json'), 'w'),
             indent = 4,
             sort_keys = True,
-            ensure_ascii = False,
+            ensure_ascii = True,
         )
 
         info = {
