@@ -4,7 +4,6 @@ import os
 
 class LanguageModel:
     def __init__(self):
-        self.last_character = Counter()
         self.total_characters = 0
         self.next_character = Counter()
         self.dictionary = {}
@@ -27,24 +26,32 @@ class LanguageModel:
         self.dictionary = self.previous_characters.get_dictionary()
         self.total_characters += len(text)
 
-    def get_most_frequent_character(self):
-        best_likelihood = 0
+    def get_most_frequent_character(self, previous_character):
+        best_character_count = 0
         most_likely = None
-        for character in self.last_character:
-            likelihood = self.last_character[character] / self.total_characters
-            if likelihood > best_likelihood:
-                best_likelihood = likelihood
+        for character in self.dictionary[previous_character]:
+            character_count = self.dictionary[previous_character][character] 
+            print (character)
+            if character_count > best_character_count:
+                best_character_count = character_count
                 most_likely = character
         return most_likely
 
     def predict(self, prefix):
-        return self.get_most_frequent_character()
+        if (len(prefix)>0):
+            last_character = prefix[(len(prefix)-1):]
+        else:
+            print("Predicting: A (first character on line)")
+            return('A')
+        
+        print("Predicting: " + self.get_most_frequent_character(last_character))
+        return self.get_most_frequent_character(last_character)
 
     def load(self, directory):
         model_json = json.load(open(os.path.join(directory, 'model.json'), 'r', encoding="utf8"))
         self.total_characters = model_json['total_characters']
-        for character in model_json['last_character']:
-            self.last_character[character] += model_json['last_character'][character]
+        for character in model_json['next_characters']:
+            self.dictionary[character] = model_json['next_characters'][character]
 
     def export(self):
         return {
