@@ -9,7 +9,16 @@ class LanguageModel:
         self.dictionary = {}
         self.written_down = []
 
+    def whitelist(self, text):
+        whitelist = "QWERTYUIOPASDFGHJKLZXCVBNM qwertyuiopasdfghjklzxccvbnměščřžýáíéúů)(,:.!?1234567890;-"
+        new_text = ""
+        for char in text:
+            if (char in whitelist):
+                new_text = new_text + char
+        return(new_text)
+        
     def train_batch(self, text):
+        text = self. whitelist(text)
         self.previous_characters = PreviousCharacters(self.dictionary)
         for i in range((len(text)-1)):
             first = text[i]
@@ -31,7 +40,7 @@ class LanguageModel:
         most_likely = None
         for character in self.dictionary[previous_character]:
             character_count = self.dictionary[previous_character][character] 
-            print (character)
+            #print (character)
             if character_count > best_character_count:
                 best_character_count = character_count
                 most_likely = character
