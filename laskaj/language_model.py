@@ -23,15 +23,17 @@ class LanguageModel:
                 best_likelihood = likelihood
                 most_likely = character
         return most_likely
-
-    def random(self):
-        character_nr = len(self.character_counts)
-        randomize = randint(0, character_nr)
-        return self.character_counts[randomize]
-
+    
+    def list_all_words(self):
+        with open ("ustava.txt", "r") as data:
+          dataset = data.read()
+        word_list = dataset.split()
+        word_list = tuple(word_list)
+        return sorted(word_list, key=str.lower)
+    
     def predict(self, prefix):
-        return self.random()
-
+        return get_most_frequent_character()
+        
     def load(self, directory):
         model_json = json.load(open(os.path.join(directory, 'model.json'), 'r'))
         self.total_characters = model_json['total_characters']
