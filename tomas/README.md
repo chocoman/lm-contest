@@ -10,5 +10,7 @@ Současnou složku contest odstraňte nebo přesuňte a spusťte příkaz
 ```
 
 python3 train.py --savedir contest cs.txt
+
+python3 contest_custom.py ./data/cs-CZ/ustava.txt
 ```
 Předtrénovaný model je už uložen ve složce contest. 
