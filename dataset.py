@@ -16,6 +16,6 @@ class Dataset:
 
         for path in paths:
             print(path)
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding = "utf8") as f:
                 for line in f:
                     yield line
