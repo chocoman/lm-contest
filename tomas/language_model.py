@@ -8,20 +8,24 @@ class LanguageModel:
         self.next_character = Counter()
         self.dictionary = {}
         self.written_down = []
+        self.prefixlen = 4
 
     def whitelist(self, text):
-        whitelist = "QWERTYUIOPASDFGHJKLZXCVBNM qwertyuiopasdfghjklzxccvbnměščřžýáíéúů)(,:.!?1234567890;-"
+        whitelist = "QWERTYUIOPASDFGHJKLZXCVBNMĚŠČŘŽÝÁÍÉĎŮÚŇŤ ňťwe–rtyuÓóöüÖÜiop„“asdďfghjklzxccvbnměščřžýáíéúů)(,:.'!?1234567890;-" + '"'
         new_text = ""
         for char in text:
             if (char in whitelist):
                 new_text = new_text + char
+            else:
+                new_text = new_text + "^"
+                #print(char)
         return(new_text)
         
     def train_batch(self, text):
         text = self. whitelist(text)
         self.previous_characters = PreviousCharacters(self.dictionary)
-        for i in range((len(text)-1)):
-            first = text[i]
+        for i in range((len(text)-self.prefixlen)):
+            first = text[(i-self.prefixlen+1):(i+1)]
             last = text[i+1]
             if (first not in self.written_down):
                 self.previous_characters.create_character(first)
@@ -38,20 +42,26 @@ class LanguageModel:
     def get_most_frequent_character(self, previous_character):
         best_character_count = 0
         most_likely = None
-        for character in self.dictionary[previous_character]:
-            character_count = self.dictionary[previous_character][character] 
-            #print (character)
-            if character_count > best_character_count:
-                best_character_count = character_count
-                most_likely = character
+        try:
+            for character in self.dictionary[previous_character]:
+                character_count = self.dictionary[previous_character][character] 
+                #print (character)
+                if character_count > best_character_count and character != "^":
+                    best_character_count = character_count
+                    most_likely = character
+        except:
+            return(" ")
+        if most_likely==None:
+            return(" ")
         return most_likely
 
     def predict(self, prefix):
-        if (len(prefix)>0):
-            last_character = prefix[(len(prefix)-1):]
+        prefix = self.whitelist(prefix)
+        if (len(prefix)>=self.prefixlen):
+            last_character = prefix[(len(prefix)-self.prefixlen):]
         else:
-            print("Predicting: A (first character on line)")
-            return('A')
+            print("Predicting: a (first character on line)")
+            return('a')
         
         print("Predicting: " + self.get_most_frequent_character(last_character))
         return self.get_most_frequent_character(last_character)
