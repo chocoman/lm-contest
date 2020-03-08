@@ -60,8 +60,9 @@ class LanguageModel:
         if (len(prefix)>=self.prefixlen):
             last_character = prefix[(len(prefix)-self.prefixlen):]
         else:
-            print("Predicting: a (first character on line)")
-            return('a')
+            if(len(prefix)==0):
+                return('a')
+            return(' ')
         
         print("Predicting: " + self.get_most_frequent_character(last_character))
         return self.get_most_frequent_character(last_character)
