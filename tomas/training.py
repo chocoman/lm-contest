@@ -5,7 +5,7 @@ from os.path import join
 from datetime import datetime
 from language_model import LanguageModel
 
-VERSION = '0.2'
+VERSION = '1.1'
 NAME = 'Tomas'
 
 class Training:
