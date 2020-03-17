@@ -1,5 +1,4 @@
-from collections import Counter
-
+ACCEPTED = list("AÁBCČDĎEĚÉFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽaábcčdďeěéfghiíjklmnňoópqrřsštťuůúvwxyýzž,.")
 class node:
   def __init__(self, upper_node, character):
     self.upper_node = upper_node
@@ -51,7 +50,6 @@ class node:
           best_likelihood = node.likelihood
       return(best)
     else:
-      print("searching for next node")
       wanted_character = word[0]
       word = word[1:]
       next_node = self.find_next(wanted_character)
@@ -65,7 +63,7 @@ def add_to_tria(starting_node, dataset):
   lines = full_text.read()
   word = ""
   for character in lines:
-    if character in list("AÁBCČDĎEÉFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽaábcčdďeéfghiíjklmnňoópqrřsštťuůúvwxyýzž,.><"):
+    if character in ACCEPTED+["<",">"]:
       word += character
     elif len(word) > 0:
       starting_node.add_word(word+">")
@@ -79,14 +77,13 @@ def export_tria(starting_node):
   export_file.write(to_save)
   export_file.close()
 
-def load_tria(file_name):
+def load_tria(starting_node, file_name):
   exported = open(file_name, "r", encoding = "utf-8")
   string = exported.read()
-  starting_node = node(None, "<")
   actual_node = starting_node
   actual_node.likelihood = ""
   for character in string:
-    if character in list("AÁBCČDĎEÉFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽaábcčdďeéfghiíjklmnňoópqrřsštťuůúvwxyýzž,.><"):
+    if character in ACCEPTED+["<",">"]:
       actual_node = actual_node.create_node(character)
       actual_node.likelihood = ""
     elif character in list("1234567890"):
@@ -96,11 +93,3 @@ def load_tria(file_name):
       actual_node = actual_node.upper_node
       
   return(starting_node)
-
-starting_node = node(None, "<")
-add_to_tria(starting_node,"ustava.txt")
-export_tria(starting_node)
-while True:
-  task = input("napište část slova ")
-  next_letter = starting_node.predict(task)
-  print(task, next_letter)

@@ -1,9 +1,9 @@
-from .language_model import LanguageModel
+from language_model import LanguageModel
 
 class ContestInterface:
     def __init__(self):
         self.model = LanguageModel()
-        self.model.load('timotej/contest_model/')
+        self.model.load('tria.txt')
 
     def predict_next_character(self, prefix):
         return self.model.predict(prefix)
