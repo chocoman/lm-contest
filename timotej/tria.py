@@ -78,6 +78,7 @@ def export_tria(starting_node):
   export_file.close()
 
 def load_tria(starting_node, file_name):
+  print("loading...")
   exported = open(file_name, "r", encoding = "utf-8")
   string = exported.read()
   actual_node = starting_node

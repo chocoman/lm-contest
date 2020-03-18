@@ -9,6 +9,7 @@ class LanguageModel:
     last_word = get_last_word(prefix)
     print(f"thinking about what could be after{last_word}")
     prediction = self.prophet.predict(last_word)
+    return(prediction)
     
   def load(self, memory):
     tria.load_tria(self.prophet, memory)
@@ -22,3 +23,6 @@ def get_last_word(string):
     else: break
   return word
 
+model = LanguageModel()
+model.load("tria.txt")
+print(model.predict("schválně jestli se chyt"))
