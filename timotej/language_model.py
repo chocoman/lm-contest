@@ -1,4 +1,4 @@
-import tria
+from . import tria
 
 class LanguageModel:
   def __init__(self):
