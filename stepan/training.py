@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from os.path import join
 from datetime import datetime
@@ -13,9 +14,15 @@ class Training:
         self.language_model = LanguageModel()
 
     def train(self, dataset_iterator):
+        line_number = 0
+        target_time = 1 * 60
+        start_time = time.time()
         for line in dataset_iterator:
             self.language_model.train_batch(line)
-
+            line_number=line_number+1
+            if line_number%200==0:
+                duration = time.time() - start_time
+                print("line: " + str(line_number) + " current time: " + str(duration) + " target time: " + str(target_time))
     def save(self, directory):
         os.makedirs(directory, exist_ok=True)
 
