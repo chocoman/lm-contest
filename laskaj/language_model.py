@@ -32,7 +32,7 @@ class LanguageModel:
         return sorted(word_list, key=str.lower)
     
     def predict(self, prefix):
-        return get_space()
+        return self.get_space()
         
     def load(self, directory):
         model_json = json.load(open(os.path.join(directory, 'model.json'), 'r'))
