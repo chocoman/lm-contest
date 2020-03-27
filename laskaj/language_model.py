@@ -14,7 +14,7 @@ class LanguageModel:
             self.character_counts[character] += 1
         self.total_characters += len(text)
 
-    def get_most_frequent_character(self):
+    def get_space(self):
         best_likelihood = 0
         most_likely = None
         for character in self.character_counts:
@@ -32,7 +32,7 @@ class LanguageModel:
         return sorted(word_list, key=str.lower)
     
     def predict(self, prefix):
-        return get_most_frequent_character()
+        return self.get_space()
         
     def load(self, directory):
         model_json = json.load(open(os.path.join(directory, 'model.json'), 'r'))
