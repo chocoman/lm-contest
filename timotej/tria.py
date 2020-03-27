@@ -38,7 +38,6 @@ class node:
       next_node.add_word(word)
 
   def predict(self, word):
-    print(word)
     if len(word) == 0:
       print("getting best option")
       best = "None"
@@ -54,8 +53,9 @@ class node:
       word = word[1:]
       next_node = self.find_next(wanted_character)
       if next_node == False:
-        return("No idea :-(")
+        return(" ")
       else:
+        print(f"found {next_node.character}") 
         return(next_node.predict(word))
 
 def add_to_tria(starting_node, dataset):
@@ -71,11 +71,6 @@ def add_to_tria(starting_node, dataset):
   full_text.close()
   return(starting_node)
 
-def export_tria(starting_node):
-  to_save = starting_node.save()
-  export_file = open("tria.txt", "w", encoding = "utf-8")
-  export_file.write(to_save)
-  export_file.close()
 
 def load_tria(starting_node, file_name):
   print("loading...")
