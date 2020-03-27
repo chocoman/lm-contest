@@ -13,7 +13,7 @@ class LanguageModel:
     return(prediction)
     
   def load(self, directory):
-    tria.load_tria(self.prophet, os.path.join(directory, "tria_testing.txt"))
+    tria.load_tria(self.prophet, os.path.join(directory, "tria.txt"))
 
 def get_last_word(string):
   word = ""

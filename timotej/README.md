@@ -9,6 +9,6 @@ a rozbalte ho zde.
 spusťte soubor train.py
 až se v konzoli objeví "where do you want to train from?" napište "cs.txt"
 
-čekejte dokud se nevypíše "finished"
+čekejte dokud se nevypíše "finished". Může to trvat klidně hodinu.
 
 Předtrénovaný model je už uložen v souboru tria.txt. 
