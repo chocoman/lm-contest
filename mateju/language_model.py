@@ -16,12 +16,31 @@ class LanguageModel:
     def get_most_frequent_character(self):
         best_likelihood = 0
         most_likely = None
+        if self.total_characters == 0:
+            return "A"
         for character in self.character_counts:
             likelihood = self.character_counts[character] / self.total_characters
             if likelihood > best_likelihood:
                 best_likelihood = likelihood
                 most_likely = character
         return most_likely
+    
+        """
+    def get_most_likely_pair(self, poslední znak):
+        best_likelihood = 0
+        most_likely = None
+        first_pair_element = poslední znak
+        
+        if first_pair_element == None:
+            return "A"
+        for character in self.character_counts:
+            if character == first_pair_element:
+                likely hood = self.character_counts[character+1] / self.total_characters
+                if likelihood > best_likelihood:
+                    best_likelihood = likelihood
+                    most_likely = character+1
+        return most_likely
+        """
 
     def predict(self, prefix):
         return self.get_most_frequent_character()
