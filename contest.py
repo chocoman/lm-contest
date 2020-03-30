@@ -8,6 +8,8 @@ import ondrej.contest_interface
 import stepan.contest_interface
 import timotej.contest_interface
 import tomas.contest_interface
+import laskaj.contest_interface
+
 from dataset import Dataset
 
 parser = argparse.ArgumentParser()
@@ -46,6 +48,10 @@ models = [
     (
         'tomas',
         tomas.contest_interface
+    ),
+    (
+        'jirka',
+        laskaj.contest_interface
     ),
 ]
 

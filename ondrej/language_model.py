@@ -8,24 +8,6 @@ class LanguageModel:
         self.character_counts = Counter()
         self.total_characters = 0
 
-    def train_batch(self, text):
-        for i in range(len(text)):
-            character = text[i]
-            self.character_counts[character] += 1
-        self.total_characters += len(text)
-
-    """
-    def get_most_frequent_character(self):
-        best_likelihood = 0
-        most_likely = None
-        for character in self.character_counts:
-            likelihood = self.character_counts[character] / self.total_characters
-            if likelihood > best_likelihood:
-                best_likelihood = likelihood
-                most_likely = character
-        return most_likely
-    """
-
     def predict(self, prefix): #just a placeholder code while trie is WIP
         pref_list = prefix.split() # all words in prefix
         last_word = pref_list[-1]  # just the last word
