@@ -15,14 +15,17 @@ class Training:
 
     def train(self, dataset_iterator):
         line_number = 0
-        target_time = 1 * 60
+        target_time = 60 * 0.2  
         start_time = time.time()
         for line in dataset_iterator:
             self.language_model.train_batch(line)
             line_number=line_number+1
+            duration = time.time() - start_time
             if line_number%200==0:
-                duration = time.time() - start_time
                 print("line: " + str(line_number) + " current time: " + str(duration) + " target time: " + str(target_time))
+            if duration >= target_time:
+                return
+            
     def save(self, directory):
         os.makedirs(directory, exist_ok=True)
 
