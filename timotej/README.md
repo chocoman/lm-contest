@@ -1,4 +1,4 @@
-#Natrénování modelu
+﻿#Natrénování modelu
 
 Stáhněte korpus české wikipedie:
 
@@ -6,9 +6,9 @@ https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11234/1-2735/cs.txt
 
 a rozbalte ho zde.
 
-Současnou složku contest odstraňte nebo přesuňte a spusťte příkaz
-```
+spusťte soubor train.py
+až se v konzoli objeví "where do you want to train from?" napište "cs.txt"
 
-python3 train.py --savedir contest cs.txt
-```
-Předtrénovaný model je už uložen ve složce contest. 
+čekejte dokud se nevypíše "finished". Může to trvat klidně hodinu.
+
+Předtrénovaný model je už uložen v souboru tria.txt. 

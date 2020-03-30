@@ -1,4 +1,4 @@
-from language_model import LanguageModel
+from .language_model import LanguageModel
 
 class ContestInterface:
     def __init__(self):
