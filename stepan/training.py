@@ -15,14 +15,14 @@ class Training:
 
     def train(self, dataset_iterator):
         line_number = 0
-        target_time = 60 * 0.2  
+        target_time = 60 * 60 * 3  
         start_time = time.time()
         for line in dataset_iterator:
             self.language_model.train_batch(line)
             line_number=line_number+1
             duration = time.time() - start_time
-            if line_number%200==0:
-                print("line: " + str(line_number) + " current time: " + str(duration) + " target time: " + str(target_time))
+            if line_number%100==0:
+                print("line: " + str(line_number) + ", current time: " + str(duration/60) + ", remaining time: " + str((target_time-duration)/60))
             if duration >= target_time:
                 return
             

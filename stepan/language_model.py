@@ -5,7 +5,7 @@ import os
 class LanguageModel:
     def __init__(self):
         self.character_groups = Counter()
-        self.training_str_length = 4
+        self.training_str_length = 7
         self.signed_groups = []
         
     def train_batch(self, text):
