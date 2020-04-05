@@ -5,8 +5,8 @@ from os.path import join
 from datetime import datetime
 from language_model import LanguageModel
 
-VERSION = '0.1'
-NAME = 'Example'
+VERSION = '0.11'
+NAME = 'Ondřej'
 
 class Training:
     def __init__(self):
