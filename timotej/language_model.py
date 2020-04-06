@@ -10,6 +10,7 @@ class LanguageModel:
     last_word = get_last_word(prefix)
     print(f"thinking about what could be after {last_word}")
     prediction = self.prophet.predict(last_word)
+    if prediction == ">": prediction = " "
     return(prediction)
     
   def load(self, directory):
