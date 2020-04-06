@@ -9,9 +9,13 @@ class LanguageModel:
         self.dictionary = {}
         self.written_down = []
         self.prefixlen = 4
+        self.trie = Trie()
+        self.nextwordprediction = False
+        self.persumed_next_word = False
+        self.previous_last = ""
 
     def whitelist(self, text):
-        whitelist = "QWERTYUIOPASDFGHJKLZXCVBNMĚŠČŘŽÝÁÍÉĎŮÚŇŤ ňťwe–rtyuÓóöüÖÜiop„“asdďfghjklzxccvbnměščřžýáíéúů)(,:.'!?1234567890;-" + '"'
+        whitelist = "QWERTYUIOPASDFGHJKLZXCVBNMĚŠČŘŽÝÁÍÉĎŮÚŇŤ ňťwe–rtyuÓóöüÖÜiopasdďfghjklzxccvbnměščřžýáíéúů,:.'!?1234567890;-"
         new_text = ""
         for char in text:
             if (char in whitelist):
@@ -20,24 +24,29 @@ class LanguageModel:
                 new_text = new_text + "^"
                 #print(char)
         return(new_text)
+
+    def wordlist(self, text, training):
+        pausechar = [" ","^"]
+        wordlist = []
+        word = ""
+        for i in text:
+            if i in pausechar:
+                if (word != ""):
+                    wordlist.append(word)
+                word = ""
+            else:
+                word = word+i
+        print (wordlist)
+        if training:
+            return wordlist
+        return wordlist, word
         
     def train_batch(self, text):
         text = self. whitelist(text)
-        self.previous_characters = PreviousCharacters(self.dictionary)
-        for i in range((len(text)-self.prefixlen)):
-            first = text[(i-self.prefixlen+1):(i+1)]
-            last = text[i+1]
-            if (first not in self.written_down):
-                self.previous_characters.create_character(first)
-                self.written_down.append(first)
-            self.previous_characters.increase_character_count(first, last)
-            
-            
-            
-            #self.next_character[characters[:2]] +=1
-            #self.last_character[characters[:1]] = characters[1:]
-        self.dictionary = self.previous_characters.get_dictionary()
-        self.total_characters += len(text)
+        text = self.wordlist(text, True)
+        for i in range((len(text)-1)):
+            self.trie.add(text[i], text[i+1])            
+
 
     def get_most_frequent_character(self, previous_character):
         best_character_count = 0
@@ -57,27 +66,149 @@ class LanguageModel:
 
     def predict(self, prefix):
         prefix = self.whitelist(prefix)
-        if (len(prefix)>=self.prefixlen):
-            last_character = prefix[(len(prefix)-self.prefixlen):]
+        prefix, leftover = self.wordlist(prefix, False)
+
+        if (len(prefix)>=1):
+            #Prefix is longer than 1 word
+            last_word = prefix[len(prefix)-1]
+            if last_word!=self.previous_last:
+                self.persumed_next_word = self.trie.predict_next_word(last_word, False)
+                self.nextwordprediction=True
+                self.previous_last=last_word
         else:
-            if(len(prefix)==0):
-                return('a')
-            return(' ')
+            #Prefix is less than one word
+            #  individual letter prediction
+
+            temp = self.trie.predict_next_word(leftover, True)
+            if temp=="$":
+                return(" ")
+            if len(temp)<2:
+                #print("this is temp " + temp)
+                return(temp)
+            
+            
         
-        print("Predicting: " + self.get_most_frequent_character(last_character))
-        return self.get_most_frequent_character(last_character)
+        #word based letter prediction
+        if self.persumed_next_word!= False:
+            if self.nextwordprediction==True:
+                if leftover == self.persumed_next_word[0:len(leftover)]:
+                    return(self.persumed_next_word[len(leftover)])
+
+
+
+        #letter prediction backup
+        #print("WORD PREDICTION FAILED")
+        temp = self.trie.predict_next_word(leftover, True)
+        if temp=="$":
+            return(" ")
+        if len(temp)==1:
+            return(temp)
+        return(" ")
 
     def load(self, directory):
         model_json = json.load(open(os.path.join(directory, 'model.json'), 'r', encoding="utf8"))
-        self.total_characters = model_json['total_characters']
-        for character in model_json['next_characters']:
-            self.dictionary[character] = model_json['next_characters'][character]
+        self.trie = self.trie.load_trie(self.trie.root, model_json['trie'])
+        
 
     def export(self):
         return {
-            'next_characters': self.previous_characters.get_dictionary(),
-            'total_characters': self.total_characters,
+            'trie': self.trie.save_trie(),
         }
+
+
+class Node:
+    def __init__(self, char):
+        self.char = char
+        self.next_nodes = {}
+    
+    def next(self, nextchar):
+        if (nextchar in self.next_nodes):
+            self.next_nodes[nextchar][1]+=1
+            return self.next_nodes[nextchar][0]
+        else:
+            newNode = Node(nextchar)
+            self.next_nodes[nextchar] = [newNode,1]
+            return newNode
+    
+    def load_node(self, key, count):
+        loadedNode = Node(key)
+        self.next_nodes[key] = [loadedNode, count]
+        return loadedNode
+
+class Trie:
+    def __init__(self):
+        self.root = Node('^')
+
+    def add_node(self, node):
+        self.root = node
+    
+    def add (self, word, next_word):
+        #print(next_word )
+        word= "^"+word+"$"
+        current_node = self.root
+        for i in word:
+            current_node = current_node.next(i)
+        current_node.next(next_word)
+
+    def save_trie(self):    
+        node = self.root
+        var = self.read_trie(node.next_nodes, False)
+        return(var)
+
+    def makelist (self, children,savecount):
+        return([[children,savecount,[]]])
+
+    def read_trie(self, node, isLast):
+        nodes = []
+        for children in node:
+            savecount = node[children][1]
+            if (children=="$"):
+                temp=["",0]
+                for i in node[children][0].next_nodes:
+                    if (temp[1] < node[children][0].next_nodes[i][1]):
+                        temp = [i,node[children][0].next_nodes[i][1]]
+                savenode=temp[0]
+                nodes.append([children,savecount,self.makelist(children,savecount)])
+            else:
+                savenode = self.read_trie(node[children][0].next_nodes, False)
+                nodes.append([children,savecount,savenode])
+        return nodes
+    
+    def load_trie(self, node, list):
+        for i in list:
+            char = i[0]
+            count = i[1]
+            sublist = i[2]
+            self.load_trie(node.load_node(char, count),sublist)
+        var = Trie()
+        var.add_node(node)
+        return var
+            
+    def predict_next_word(self, word, orLetter):
+        #print(self.root.next_nodes["^"][0].next_nodes)
+        current_node=self.root.next_nodes["^"][0]
+        if(orLetter==False):
+            word= word+"$"
+        temp=["",0]
+        #print("THIS SHOULD CHANGE: "+word)
+        try:
+            for i in word:
+                current_node = current_node.next(i)
+                temp=["",0]
+                for j in current_node.next_nodes:
+                    #print(j)
+                    #print(current_node.next_nodes[j][1])
+                    if (temp[1] < current_node.next_nodes[j][1] and ((len(j)>1)or orLetter)):
+                        temp = [j,current_node.next_nodes[j][1]]
+            if(orLetter):
+                print("next letter: "+temp[0])
+                return (temp[0])
+            else:
+                print("next word: "+ temp[0])
+            return (temp[0]+" ")
+        except:
+            print("failed to predict")
+            return(False)
 
 class PreviousCharacters:
     def __init__ (self, dictionary):
