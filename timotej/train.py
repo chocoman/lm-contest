@@ -24,7 +24,6 @@ def add_quartets(starting_node, dataset):
       quartet += character
     else: quartet = ""
     if len(quartet) > 4:
-      print(quartet)
       quartet = quartet[1:]
     try:
       if quartet[2] == " ":
@@ -47,9 +46,9 @@ quartets = node(None, "<")
 directory = input("where do you want to train from? ")
 print("training words...")
 add_words(words, directory)
+export(words, "words_tria.txt")
 print("training quartets...")
 add_quartets(quartets, directory)
-export(words, "words_tria.txt")
 export(quartets, "quartets_tria.txt")
 
 
