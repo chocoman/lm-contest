@@ -9,6 +9,7 @@ import stepan.contest_interface
 import timotej.contest_interface
 import tomas.contest_interface
 import laskaj.contest_interface
+#import sam.contest_interface
 
 from dataset import Dataset
 
@@ -25,6 +26,12 @@ models = [
         'example',
         example.contest_interface
     ),
+  '''
+    (
+        'sam',
+        sam.contest_interface
+    ),
+  '''
     (
         'mateju',
         mateju.contest_interface
