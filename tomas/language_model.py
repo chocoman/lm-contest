@@ -9,10 +9,12 @@ class LanguageModel:
         self.dictionary = {}
         self.written_down = []
         self.prefixlen = 4
-        self.trie = Trie()
+        self.trie = Trie(1)
         self.nextwordprediction = False
         self.persumed_next_word = False
         self.previous_last = ""
+        self.lastprefix = ""
+        self.trainmultiplier=1
 
     def whitelist(self, text):
         whitelist = "QWERTYUIOPASDFGHJKLZXCVBNMĚŠČŘŽÝÁÍÉĎŮÚŇŤ ňťwe–rtyuÓóöüÖÜiopasdďfghjklzxccvbnměščřžýáíéúů,:.'!?1234567890;-"
@@ -65,6 +67,10 @@ class LanguageModel:
         return most_likely
 
     def predict(self, prefix):
+        if len(prefix)>len(self.lastprefix):
+            self.trie.changetrainmultiplier(5)
+            self.train_batch(self.lastprefix)
+        self.lastprefix=prefix
         prefix = self.whitelist(prefix)
         prefix, leftover = self.wordlist(prefix, False)
 
@@ -117,27 +123,34 @@ class LanguageModel:
 
 
 class Node:
-    def __init__(self, char):
+    def __init__(self, char, trainmultiplier):
         self.char = char
         self.next_nodes = {}
+        self.trainmultiplier = trainmultiplier
+
+    def changetrainmultiplier(self, trainmultiplier):
+        self.trainmultiplier=trainmultiplier
     
     def next(self, nextchar):
         if (nextchar in self.next_nodes):
-            self.next_nodes[nextchar][1]+=1
+            self.next_nodes[nextchar][1]=self.next_nodes[nextchar][1] + (1*self.trainmultiplier)
             return self.next_nodes[nextchar][0]
         else:
-            newNode = Node(nextchar)
-            self.next_nodes[nextchar] = [newNode,1]
+            newNode = Node(nextchar, self.trainmultiplier)
+            self.next_nodes[nextchar] = [newNode,self.trainmultiplier]
             return newNode
     
     def load_node(self, key, count):
-        loadedNode = Node(key)
+        loadedNode = Node(key, self.trainmultiplier)
         self.next_nodes[key] = [loadedNode, count]
         return loadedNode
 
 class Trie:
-    def __init__(self):
-        self.root = Node('^')
+    def __init__(self, trainmultiplier):
+        self.root = Node('^', trainmultiplier)
+
+    def changetrainmultiplier(self, trainmultiplier):
+        self.root.changetrainmultiplier(trainmultiplier)
 
     def add_node(self, node):
         self.root = node
@@ -180,7 +193,7 @@ class Trie:
             count = i[1]
             sublist = i[2]
             self.load_trie(node.load_node(char, count),sublist)
-        var = Trie()
+        var = Trie(1)
         var.add_node(node)
         return var
             

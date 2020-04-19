@@ -1,4 +1,3 @@
-ACCEPTED = list("AÁBCČDĎEĚÉFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽaábcčdďeěéfghiíjklmnňoópqrřsštťuůúvwxyýzž,.")
 class node:
   def __init__(self, upper_node, character):
     self.upper_node = upper_node
@@ -24,7 +23,7 @@ class node:
     result += str(self.likelihood)
     for lower in self.lower_nodes:
       result += lower.save()
-    result += ")"
+    result += "§"
     return(result)
     
   def add_word(self, word):
@@ -39,11 +38,9 @@ class node:
 
   def predict(self, word):
     if len(word) == 0:
-      print("getting best option")
       best = "None"
       best_likelihood =0
       for node in self.lower_nodes:
-        print (node.character, node.likelihood)
         if node.likelihood > best_likelihood:
           best = node.character
           best_likelihood = node.likelihood
@@ -55,21 +52,7 @@ class node:
       if next_node == False:
         return(" ")
       else:
-        print(f"found {next_node.character}") 
         return(next_node.predict(word))
-
-def add_to_tria(starting_node, dataset):
-  full_text = open(dataset, "r", encoding = "utf-8")
-  lines = full_text.read()
-  word = ""
-  for character in lines:
-    if character in ACCEPTED+["<",">"]:
-      word += character
-    elif len(word) > 0:
-      starting_node.add_word(word+">")
-      word = ""
-  full_text.close()
-  return(starting_node)
 
 
 def load_tria(starting_node, file_name):
@@ -79,13 +62,12 @@ def load_tria(starting_node, file_name):
   actual_node = starting_node
   actual_node.likelihood = ""
   for character in string:
-    if character in ACCEPTED+["<",">"]:
-      actual_node = actual_node.create_node(character)
-      actual_node.likelihood = ""
-    elif character in list("1234567890"):
+    if character in list("1234567890"):
       actual_node.likelihood += character
-    elif character == ")":
+    elif character == "§":
       actual_node.likelihood = int(actual_node.likelihood)
       actual_node = actual_node.upper_node
-      
+    else:
+      actual_node = actual_node.create_node(character)
+      actual_node.likelihood = ""
   return(starting_node)
