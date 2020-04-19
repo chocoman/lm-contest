@@ -50,7 +50,7 @@ class LanguageModel:
         self.total_predictions = self.total_predictions + 1
         prefix = self.remove_excess_spaces(prefix)
         if len(prefix)<self.training_str_length:
-            print("Předpovězeno: " + str(self.total_predictions) + "Procento neznámých prefixů: " + str(100 * self.not_known / self.total_predictions))
+            print("Procento neznámých prefixů: " + str(100 * self.not_known / self.total_predictions))
             return "e"
         prefix = prefix[(- self.training_str_length) :-1] + prefix [-1]
         prefix = str(prefix)
