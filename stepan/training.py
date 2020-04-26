@@ -15,7 +15,7 @@ class Training:
 
     def train(self, dataset_iterator):
         line_number = 0
-        target_time = 60 * 60 * 4  
+        target_time = 60 * 60 * 2.5 
         start_time = time.time()
         for line in dataset_iterator:
             self.language_model.train_batch(line)
