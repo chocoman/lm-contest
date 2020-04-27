@@ -45,22 +45,22 @@ class node:
           best = node.character
           best_likelihood = node.likelihood
       if best == None:
-        print("no idea")
-        best = " "
+        # ~ print("no idea")
+        best = False
       return(best)
     else:
       wanted_character = word[0]
       word = word[1:]
       next_node = self.find_next(wanted_character)
       if next_node == False:
-        print("no idea")
+        # ~ print("no idea")
         return(False)
       else:
         return(next_node.predict(word))
 
 
 def load_tria(starting_node, file_name):
-  print("loading...")
+  print(f"loading {file_name}...")
   exported = open(file_name, "r", encoding = "utf-8")
   string = exported.read()
   actual_node = starting_node

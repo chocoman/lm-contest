@@ -15,19 +15,19 @@ def add_words(starting_node, dataset):
   full_text.close()
   return(starting_node)
 
-def add_quartets(starting_node, dataset):
+def add_groups(starting_node, dataset):
   full_text = open(dataset, "r", encoding = "utf-8")
   lines = full_text.read()
-  quartet = ""
+  group = ""
   for character in lines:
     if character in ACCEPTED + [" "]:
-      quartet += character
-    else: quartet = ""
-    if len(quartet) > 4:
-      quartet = quartet[1:]
+      group += character
+    else: group = ""
+    if len(group) > 4:
+      group = group[1:]
     try:
-      if quartet[2] == " ":
-        starting_node.add_word(quartet)
+      if group[2] == " ":
+        starting_node.add_word(group)
     except:  pass
   full_text.close()
   return(starting_node)
@@ -42,13 +42,13 @@ def export(starting_node, file_name):
   print("exported")
   
 words = node(None, "<")
-quartets = node(None, "<")
+groups = node(None, "<")
 directory = input("where do you want to train from? ")
 print("training words...")
 add_words(words, directory)
 export(words, "words_tria.txt")
-print("training quartets...")
-add_quartets(quartets, directory)
-export(quartets, "quartets_tria.txt")
+print("training groups...")
+add_groups(groups, directory)
+export(groups, "groups_tria.txt")
 
 
