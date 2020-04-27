@@ -38,19 +38,23 @@ class node:
 
   def predict(self, word):
     if len(word) == 0:
-      best = "None"
+      best = None
       best_likelihood =0
       for node in self.lower_nodes:
         if node.likelihood > best_likelihood:
           best = node.character
           best_likelihood = node.likelihood
+      if best == None:
+        print("no idea")
+        best = " "
       return(best)
     else:
       wanted_character = word[0]
       word = word[1:]
       next_node = self.find_next(wanted_character)
       if next_node == False:
-        return(" ")
+        print("no idea")
+        return(False)
       else:
         return(next_node.predict(word))
 

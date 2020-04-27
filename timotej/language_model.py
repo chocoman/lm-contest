@@ -5,21 +5,29 @@ class LanguageModel:
   def __init__(self):
     self.tria_words = tria.node(None, "<")
     self.tria_quartets = tria.node(None, "<")
-
+    self.predictions = 0
+    self.unknown = 0
   def predict(self, prefix):
+    self.predictions += 1
     if len(prefix) == 0:
-      pass
-    elif prefix[-1] in list(".,!?)-“;:"):
+      last_word = get_last_word(prefix)
+      prediction = self.tria_words.predict(last_word)
+      if prediction == ">": prediction = " "
+    else:  
+      if prefix[-1] in list(".,!?)-“;:"):
+        prediction = " "
+      elif prefix[-1] == " ":
+        prefix = prefix[-3:]
+        prediction = self.tria_quartets.predict(prefix)
+      else:
+        prefix = get_last_word(prefix)
+        prediction = self.tria_words.predict(prefix)
+        if prediction == ">": prediction = " "
+    if prediction == False:
+      self.unknown += 1
+      print(f"i have no idea what could be after {prefix}")
       prediction = " "
-      return(prediction)
-    elif prefix[-1] == " ":
-      last_three = prefix[-3:]
-      prediction = self.tria_quartets.predict(last_three)
-      return(prediction)
-
-    last_word = get_last_word(prefix)
-    prediction = self.tria_words.predict(last_word)
-    if prediction == ">": prediction = " "
+    print(self.unknown, "/", self.predictions, "( =", self.unknown/self.predictions*100, "% )")
     return(prediction)
     
   def load(self, directory):
