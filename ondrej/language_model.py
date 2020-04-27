@@ -9,7 +9,7 @@ class LanguageModel:            # work in progress - I need to figure out export
         self.trie = LetterTrie(" ")
         self.total_characters = 0
         self.separator = "*" # marks the end of the word
-        self.splits = r'["\s(.*;,\s)\s]\s*' # string containing all seperataros used for split when training and predicting
+        self.split_chars = r'["\s(.*;,\s)\s]\s*' # string containing all seperataros used for split when training and predicting
         sys.setrecursionlimit(10000)
 
     def predict(self, prefix):    # splits the given prefix into words, takes the last word and decides if its last letter is a space
@@ -20,10 +20,10 @@ class LanguageModel:            # work in progress - I need to figure out export
             #print("My prediction is " + letter)
             return letter         # it doesn't return space
 
-        pref_list = re.split(self.splits, prefix) # prefix split into words
+        pref_list = re.split(self.split_chars, prefix) # prefix split into words
         last_word = pref_list[-1].lower()         # gets the last word
         if(last_word.isspace()):
-            return "."  #if the last word "is" a space, it's because it replaced one of the self.splits characters (usually end of the sentence)
+            return "."  #if the last word "is" a space, it's because it replaced one of the self.split_chars characters (usually end of the sentence)
 
         predicted_letter = self.search_trough_trie(last_word)
         #print("My prediction is " + predicted_letter)
@@ -32,7 +32,7 @@ class LanguageModel:            # work in progress - I need to figure out export
     def get_list_of_words(self, file_name):     # gets words from textfile and returns them sorted
         with open (file_name, "r", encoding = "utf8") as test_data:
           wordset = test_data.read()
-        word_list =  tuple(re.split(self.splits, wordset))
+        word_list =  tuple(re.split(self.split_chars, wordset))
         return sorted(word_list, key = str.lower)
 
     def add_words_to_trie(self, done_training, filename): # adds all words (strings) from given list to trie (used for testing a smaller trie)
