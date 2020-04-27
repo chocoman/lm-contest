@@ -5,7 +5,7 @@ import os
 class LanguageModel:
     def __init__(self):
         self.character_groups = Counter()
-        self.training_str_length = 6
+        self.training_str_length = 5
         self.signed_groups = []
         self.total_predictions = 0
         self.not_known = 0

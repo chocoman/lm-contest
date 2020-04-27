@@ -38,7 +38,7 @@ class LanguageModel:
                 word = ""
             else:
                 word = word+i
-        print (wordlist)
+        #print (wordlist)
         if training:
             return wordlist
         return wordlist, word
@@ -67,9 +67,10 @@ class LanguageModel:
         return most_likely
 
     def predict(self, prefix):
-        if len(prefix)>len(self.lastprefix):
+        if len(prefix)<len(self.lastprefix):
             self.trie.changetrainmultiplier(5)
-            self.train_batch(self.lastprefix)
+            for i in range(1500):
+                self.train_batch(self.lastprefix)
         self.lastprefix=prefix
         prefix = self.whitelist(prefix)
         prefix, leftover = self.wordlist(prefix, False)
