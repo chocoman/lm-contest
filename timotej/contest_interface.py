@@ -1,9 +1,12 @@
 from .language_model import LanguageModel
 
 class ContestInterface:
-    def __init__(self, statistics_mode = False):
+    def __init__(self, statistics_mode = False, test_mode = None):
         self.model = LanguageModel()
-        self.model.load('timotej/')
+        if test_mode:
+            self.model.load('timotej/', _tria_testing.txt)
+        else:
+            self.model.load('timotej/')
         self.statistics_mode=statistics_mode
         if statistics_mode:
             self.last_prediction = None

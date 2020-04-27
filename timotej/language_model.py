@@ -1,6 +1,8 @@
 from . import tria
 import os
 
+GROUP = 4
+
 class LanguageModel:
   def __init__(self):
     self.tria_words = tria.node(None, "<")
@@ -20,7 +22,7 @@ class LanguageModel:
         prediction = " "
       elif prefix[-1] == " ":
         way = "group"
-        prefix = prefix[-3:]
+        prefix = prefix[-(GROUP-1):]
         prediction = self.tria_groups.predict(prefix)
       else:
         way = "word"
@@ -36,9 +38,9 @@ class LanguageModel:
     else:
       return(prediction)
     
-  def load(self, directory):
-    tria.load_tria(self.tria_words, os.path.join(directory, "words_tria.txt"))
-    tria.load_tria(self.tria_groups, os.path.join(directory, "groups_tria.txt"))
+  def load(self, directory, suf = "_tria.txt"):
+    tria.load_tria(self.tria_words, os.path.join(directory, "words"+suf))
+    tria.load_tria(self.tria_groups, os.path.join(directory, "groups"+suf))
 
 def get_last_word(string):
   word = ""

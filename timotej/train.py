@@ -23,7 +23,7 @@ def add_groups(starting_node, dataset):
     if character in ACCEPTED + [" "]:
       group += character
     else: group = ""
-    if len(group) > 4:
+    if len(group) > 6:
       group = group[1:]
     try:
       if group[2] == " ":
@@ -41,13 +41,15 @@ def export(starting_node, file_name):
   export_file.close()
   print("exported")
   
-words = node(None, "<")
-groups = node(None, "<")
 directory = input("where do you want to train from? ")
+
 print("training words...")
+words = node(None, "<")
 add_words(words, directory)
 export(words, "words_tria.txt")
+
 print("training groups...")
+groups = node(None, "<")
 add_groups(groups, directory)
 export(groups, "groups_tria.txt")
 

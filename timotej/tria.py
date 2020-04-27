@@ -1,3 +1,5 @@
+import sys
+
 class node:
   def __init__(self, upper_node, character):
     self.upper_node = upper_node
@@ -65,7 +67,12 @@ def load_tria(starting_node, file_name):
   string = exported.read()
   actual_node = starting_node
   actual_node.likelihood = ""
-  for character in string:
+  length = len(string)
+  for i in range(length):
+    if round((i/length)%0.001, 5)==0:
+      sys.stdout.write("\r{0}".format(str(round((i/length)*100, 1))+"%"))
+      sys.stdout.flush()
+    character = string[i]
     if character in list("1234567890"):
       actual_node.likelihood += character
     elif character == "§":
