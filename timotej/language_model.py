@@ -1,7 +1,7 @@
 from . import tria
 import os
 
-GROUP = 4
+GROUP = 6
 
 class LanguageModel:
   def __init__(self):

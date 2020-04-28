@@ -56,7 +56,7 @@ def add_words(starting_node, dataset):
   length = len(lines)
   for i in range(length):
     if round((i/length)%0.0001, 7)==0:
-      sys.stdout.write("\r{0}".format(str(round((i/length)*100, 2))+"%"))
+      sys.stdout.write(f"\r{round((i/length)*100, 2)}%"))
       sys.stdout.flush()
     character = lines[i]
     if character in ACCEPTED:
@@ -74,7 +74,7 @@ def add_groups(starting_node, dataset):
   length = len(lines)
   for i in range(length):
     if round((i/length)%0.0001, 7)==0:
-      sys.stdout.write("\r{0}".format(str(round((i/length)*100, 2))+"%"))
+      sys.stdout.write(f"\r{round((i/length)*100, 2)}%"))
       sys.stdout.flush()
     character = lines[i]
     if character in ACCEPTED + [" "]:
