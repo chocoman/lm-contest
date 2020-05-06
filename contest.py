@@ -2,14 +2,14 @@ import argparse
 import traceback
 from testing import Testing
 import example.contest_interface
-import mateju.contest_interface
-import milan.contest_interface
-import ondrej.contest_interface
+#import mateju.contest_interface
+#import milan.contest_interface
+#import ondrej.contest_interface
 import stepan.contest_interface
 import timotej.contest_interface
 import tomas.contest_interface
-import laskaj.contest_interface
-import sam.contest_interface
+#import laskaj.contest_interface
+#import sam.contest_interface
 
 from dataset import Dataset
 
@@ -27,21 +27,25 @@ models = [
         example.contest_interface
     ),
     (
-        'sam',
-        sam.contest_interface
+        'tomas',
+        tomas.contest_interface
     ),
-    (
-        'mateju',
-        mateju.contest_interface
-    ),
-    (
-        'milan',
-        milan.contest_interface
-    ),
-    (
-        'ondrej',
-        ondrej.contest_interface
-    ),
+#    (
+#        'sam',
+#        sam.contest_interface
+#    ),
+#    (
+#        'mateju',
+#        mateju.contest_interface
+#    ),
+#    (
+#        'milan',
+#        milan.contest_interface
+#    ),
+#    (
+#        'ondrej',
+#        ondrej.contest_interface
+#    ),
     (
         'stepan',
         stepan.contest_interface
@@ -50,14 +54,10 @@ models = [
         'timotej',
         timotej.contest_interface
     ),
-    (
-        'tomas',
-        tomas.contest_interface
-    ),
-    (
-        'jirka',
-        laskaj.contest_interface
-    ),
+#    (
+#        'jirka',
+#        laskaj.contest_interface
+#    ),
 ]
 
 testing = Testing()
