@@ -1,30 +1,46 @@
 from . import tria
 import os
 
+GROUP = 6
+
 class LanguageModel:
   def __init__(self):
     self.tria_words = tria.node(None, "<")
-    self.tria_quartets = tria.node(None, "<")
-
-  def predict(self, prefix):
+    self.tria_groups = tria.node(None, "<")
+    self.predictions = 0
+    self.unknown = 0
+  def predict(self, prefix, statistics_mode = False):
+    self.predictions += 1
     if len(prefix) == 0:
-      pass
-    elif prefix[-1] in list(".,!?)-“;:"):
+      way = "word"
+      last_word = get_last_word(prefix)
+      prediction = self.tria_words.predict(last_word)
+      if prediction == ">": prediction = " "
+    else:  
+      if prefix[-1] in list(".,!?)-“;:"):
+        way = "interpunction"
+        prediction = " "
+      elif prefix[-1] == " ":
+        way = "group"
+        prefix = prefix[-(GROUP-1):]
+        prediction = self.tria_groups.predict(prefix)
+      else:
+        way = "word"
+        prefix = get_last_word(prefix)
+        prediction = self.tria_words.predict(prefix)
+        if prediction == ">": prediction = " "
+    if prediction == False:
+      self.unknown += 1
       prediction = " "
+    if statistics_mode:
+      print(self.unknown, "/", self.predictions, "( =", self.unknown/self.predictions*100, "% )")
+      return(prediction, way)
+    else:
       return(prediction)
-    elif prefix[-1] == " ":
-      last_three = prefix[-3:]
-      prediction = self.tria_quartets.predict(last_three)
-      return(prediction)
-
-    last_word = get_last_word(prefix)
-    prediction = self.tria_words.predict(last_word)
-    if prediction == ">": prediction = " "
-    return(prediction)
     
-  def load(self, directory):
-    tria.load_tria(self.tria_words, os.path.join(directory, "words_tria.txt"))
-    tria.load_tria(self.tria_quartets, os.path.join(directory, "quartets_tria.txt"))
+  def load(self, directory, suf = "_tria.txt"):
+    tria.load_tria(self.tria_words, os.path.join(directory, "words"+suf))
+    tria.load_tria(self.tria_groups, os.path.join(directory, "groups"+suf))
 
 def get_last_word(string):
   word = ""
