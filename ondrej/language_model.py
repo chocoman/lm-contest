@@ -119,14 +119,4 @@ class LetterTrie:  #trie - each letter stores how many times it appeared after t
         for child in self.child_letters:
             print(child.letter + " " + str(child.how_many_times))
 
-"""
-#TESTING (WORKS! with local loading)
-l = LanguageModel()
-#l.add_words_to_trie(True, "cs.txt")
-l.load('contest_model/')
-#l.trie.print_children_counts()
-wordlist = ["Vražedk", "Soudc", "Ostro", "Hmm", "Guvernantk", "Kul", "Emm", "Em"]
-for word in wordlist:
-    l.predict(word)
-    """
 

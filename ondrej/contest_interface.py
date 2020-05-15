@@ -1,5 +1,4 @@
-from .language_model import LanguageModel
-from .language_model import LetterTrie
+from ondrej.language_model import LanguageModel
 
 class ContestInterface:
     def __init__(self):
