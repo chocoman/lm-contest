@@ -21,8 +21,10 @@ class Training:
             self.language_model.train_batch(line)
             line_number=line_number+1
             duration = time.time() - start_time
-            if line_number%100==0:
-                print("line: " + str(line_number) + ", current time: " + str(duration/60) + ", remaining time: " + str((target_time-duration)/60))
+            if line_number % 100 == 0:
+                print("line: " + str(line_number) + ", current time: " +
+                    str(duration / 60) + ", remaining time: " + 
+                    str((target_time - duration) / 60))
             if duration >= target_time:
                 return
             
