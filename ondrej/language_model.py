@@ -15,6 +15,8 @@ class LanguageModel:
     def predict(self, prefix):    # splits the given prefix into words, takes the last word and decides if its last letter is a space
         #print("---------------")
         #print("given text: " + str(prefix))
+        if(len(prefix) == 0):
+            return " "
         if(prefix[-1].isspace()): # if the last character in prefix is a space
             letter = self.return_letter_after_space()
             #print("My prediction is " + letter)
@@ -77,7 +79,7 @@ class LanguageModel:
         #print("Exporting Finished")
 
     def load(self, directory): # loads the trie from the pickle file
-        print("Loading")
+        #print("Loading")
         #print(str(os.path.join(directory, "trie.pickle")))
         filename = os.path.join(directory, "trie.pickle")
         loaded_trie = open(filename, "rb")

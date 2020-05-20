@@ -7,7 +7,7 @@ l = LanguageModel()
 l.add_words_to_trie(True, "ustava.txt")
 l.load('contest_model/')
 #l.trie.print_children_counts()
-wordlist = ["Vražedk", "Soudc", "Ostro", "Hmm", "Guvernantk", "Kul", "Emm", "Em"]
+wordlist = ["", "Soudc", "Ostro", "Hmm", "Guvernantk", "Kul", "Emm", "Em"]
 for word in wordlist:
     prediction = l.predict(word)
     print(word + ' ' + prediction)
